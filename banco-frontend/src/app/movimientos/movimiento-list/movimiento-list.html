@@ -1,0 +1,55 @@
+<div class="header">
+  <h2>Movimientos</h2>
+  <button class="btn-primary" (click)="abrirModal()">+ Nuevo Movimiento</button>
+</div>
+
+<input
+  type="text"
+  placeholder="Buscar por cuenta o tipo..."
+  [(ngModel)]="busqueda"
+  (input)="buscar()"
+  class="search-input"
+/>
+
+<div *ngIf="mensajeError && !mostrarModal" class="error-message">
+  {{ mensajeError }}
+</div>
+
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>Fecha</th>
+      <th>Cuenta</th>
+      <th>Tipo</th>
+      <th>Valor</th>
+      <th>Saldo</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let mov of movimientosFiltrados">
+      <td>{{ mov.fecha | date: 'short' }}</td>
+      <td>{{ mov.cuenta?.numeroCuenta || mov.numeroCuenta }}</td>
+      <td>{{ mov.tipoMovimiento }}</td>
+      <td [class.valor-negativo]="mov.valor < 0">{{ mov.valor | number: '1.2-2' }}</td>
+      <td>{{ mov.saldo | number: '1.2-2' }}</td>
+      <td>
+        <button class="btn-delete" (click)="eliminar(mov.movimientoId)">Eliminar</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<p *ngIf="movimientosFiltrados.length === 0 && !mensajeError">No hay movimientos registrados.</p>
+
+<div class="modal-overlay" *ngIf="mostrarModal" (click)="cerrarModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <app-movimiento-form
+      [mensajeError]="mensajeError"
+      [cuentas]="cuentas"
+      (guardar)="onGuardar($event)"
+      (cancelar)="cerrarModal()"
+    >
+    </app-movimiento-form>
+  </div>
+</div>

@@ -1,0 +1,59 @@
+<div class="header">
+  <h2>Clientes</h2>
+  <button class="btn-primary" (click)="abrirModalNuevo()">+ Nuevo Cliente</button>
+</div>
+
+<input
+  type="text"
+  placeholder="Buscar por nombre o identificación..."
+  [(ngModel)]="terminoBusqueda"
+  (input)="buscar()"
+  class="search-input"
+/>
+
+<div *ngIf="mensajeError && !mostrarModal" class="error-message">
+  {{ mensajeError }}
+</div>
+
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>Identificación</th>
+      <th>Nombre</th>
+      <th>Género</th>
+      <th>Edad</th>
+      <th>Teléfono</th>
+      <th>Estado</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let cliente of clientesFiltrados">
+      <td>{{ cliente.identificacion }}</td>
+      <td>{{ cliente.nombre }}</td>
+      <td>{{ cliente.genero }}</td>
+      <td>{{ cliente.edad }}</td>
+      <td>{{ cliente.telefono }}</td>
+      <td>{{ cliente.estado ? 'Activo' : 'Inactivo' }}</td>
+      <td>
+        <button class="btn-edit" (click)="abrirModalEditar(cliente)">Editar</button>
+        <button class="btn-delete" (click)="eliminar(cliente.id)">Eliminar</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<p *ngIf="clientesFiltrados.length === 0 && !mensajeError">No hay clientes registrados.</p>
+
+<div class="modal-overlay" *ngIf="mostrarModal" (click)="cerrarModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <app-cliente-form
+      [cliente]="clienteSeleccionado"
+      [esEdicion]="esEdicion"
+      [mensajeError]="mensajeError"
+      (guardar)="onGuardar($event)"
+      (cancelar)="cerrarModal()"
+    >
+    </app-cliente-form>
+  </div>
+</div>

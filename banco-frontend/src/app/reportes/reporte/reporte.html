@@ -1,0 +1,68 @@
+<div class="header">
+  <h2>Reportes - Estado de Cuenta</h2>
+</div>
+
+<div class="filtros">
+  <div class="form-group">
+    <label>Cliente</label>
+    <select [(ngModel)]="clienteIdSeleccionado">
+      <option [ngValue]="null">Seleccione...</option>
+      <option *ngFor="let cliente of clientes" [ngValue]="cliente.id">
+        {{ cliente.nombre }}
+      </option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label>Fecha Inicio</label>
+    <input type="date" [(ngModel)]="fechaInicio" />
+  </div>
+
+  <div class="form-group">
+    <label>Fecha Fin</label>
+    <input type="date" [(ngModel)]="fechaFin" />
+  </div>
+
+  <button class="btn-primary" (click)="generarReporte()">Generar Reporte</button>
+</div>
+
+<div *ngIf="mensajeError" class="error-message">
+  {{ mensajeError }}
+</div>
+
+<div *ngIf="cargando" class="loading">Generando reporte...</div>
+
+<div *ngIf="reporte" class="reporte-resultado">
+  <div class="reporte-header">
+    <h3>Cliente: {{ reporte.cliente }}</h3>
+    <button class="btn-secondary" (click)="descargarPdf()">Descargar PDF</button>
+  </div>
+
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Número Cuenta</th>
+        <th>Tipo</th>
+        <th>Saldo Actual</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let cuenta of reporte.cuentas">
+        <td>{{ cuenta.numeroCuenta }}</td>
+        <td>{{ cuenta.tipoCuenta }}</td>
+        <td>{{ cuenta.saldoActual | number: '1.2-2' }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="totales">
+    <div class="total-item total-creditos">
+      <span>Total Créditos</span>
+      <strong>{{ reporte.totalCreditos | number: '1.2-2' }}</strong>
+    </div>
+    <div class="total-item total-debitos">
+      <span>Total Débitos</span>
+      <strong>{{ reporte.totalDebitos | number: '1.2-2' }}</strong>
+    </div>
+  </div>
+</div>

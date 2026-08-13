@@ -1,0 +1,58 @@
+<div class="header">
+  <h2>Cuentas</h2>
+  <button class="btn-primary" (click)="abrirModalNuevo()">+ Nueva Cuenta</button>
+</div>
+
+<input
+  type="text"
+  placeholder="Buscar por número o tipo de cuenta..."
+  [(ngModel)]="busqueda"
+  (input)="buscar()"
+  class="search-input"
+/>
+
+<div *ngIf="mensajeError && !mostrarModal" class="error-message">
+  {{ mensajeError }}
+</div>
+
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>Número Cuenta</th>
+      <th>Tipo</th>
+      <th>Saldo</th>
+      <th>Cliente</th>
+      <th>Estado</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let cuenta of cuentasFiltradas">
+      <td>{{ cuenta.numeroCuenta }}</td>
+      <td>{{ cuenta.tipoCuenta }}</td>
+      <td>{{ cuenta.saldoInicial | number: '1.2-2' }}</td>
+      <td>{{ nombreCliente(cuenta) }}</td>
+      <td>{{ cuenta.estado ? 'Activa' : 'Inactiva' }}</td>
+      <td>
+        <button class="btn-edit" (click)="abrirModalEditar(cuenta)">Editar</button>
+        <button class="btn-delete" (click)="eliminar(cuenta.numeroCuenta)">Eliminar</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<p *ngIf="cuentasFiltradas.length === 0 && !mensajeError">No hay cuentas registradas.</p>
+
+<div class="modal-overlay" *ngIf="mostrarModal" (click)="cerrarModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <app-cuenta-form
+      [cuenta]="cuentaSeleccionada"
+      [esEdicion]="esEdicion"
+      [mensajeError]="mensajeError"
+      [clientes]="clientes"
+      (guardar)="onGuardar($event)"
+      (cancelar)="cerrarModal()"
+    >
+    </app-cuenta-form>
+  </div>
+</div>

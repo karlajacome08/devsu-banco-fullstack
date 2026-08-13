@@ -1,0 +1,12 @@
+# Backend
+api-banco/target/
+api-banco/.mvn/
+
+# Frontend
+banco-frontend/node_modules/
+banco-frontend/.angular/
+banco-frontend/dist/
+
+# General
+.DS_Store
+*.log

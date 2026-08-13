@@ -1,0 +1,53 @@
+<form (ngSubmit)="onSubmit()">
+  <h3>{{ esEdicion ? 'Editar Cuenta' : 'Nueva Cuenta' }}</h3>
+
+  <div *ngIf="mensajeError" class="error-message">
+    {{ mensajeError }}
+  </div>
+
+  <div class="form-group">
+    <label>Número de Cuenta</label>
+    <input
+      type="text"
+      [(ngModel)]="cuentaLocal.numeroCuenta"
+      name="numeroCuenta"
+      [disabled]="esEdicion"
+    />
+  </div>
+
+  <div class="form-group">
+    <label>Tipo de Cuenta</label>
+    <select [(ngModel)]="cuentaLocal.tipoCuenta" name="tipoCuenta">
+      <option value="">Seleccione...</option>
+      <option value="Ahorro">Ahorro</option>
+      <option value="Corriente">Corriente</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label>Saldo Inicial</label>
+    <input type="number" [(ngModel)]="cuentaLocal.saldoInicial" name="saldoInicial" />
+  </div>
+
+  <div class="form-group">
+    <label>Cliente</label>
+    <select [(ngModel)]="clienteIdSeleccionado" name="clienteId">
+      <option [ngValue]="null">Seleccione...</option>
+      <option *ngFor="let cliente of clientes" [ngValue]="cliente.id">
+        {{ cliente.nombre }}
+      </option>
+    </select>
+  </div>
+
+  <div class="form-group checkbox-group">
+    <label>
+      <input type="checkbox" [(ngModel)]="cuentaLocal.estado" name="estado" />
+      Activa
+    </label>
+  </div>
+
+  <div class="form-actions">
+    <button type="submit" class="btn-primary">Guardar</button>
+    <button type="button" class="btn-secondary" (click)="onCancelar()">Cancelar</button>
+  </div>
+</form>

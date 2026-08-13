@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: banco-postgres
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: Pass123!
+      POSTGRES_DB: bancoDB
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - banco-network
+
+  backend:
+    build: .
+    container_name: banco-backend
+    depends_on:
+      - postgres
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/bancoDB
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: Pass123!
+    ports:
+      - "8080:8080"
+    networks:
+      - banco-network
+
+volumes:
+  postgres_data:
+
+networks:
+  banco-network:
+    driver: bridge

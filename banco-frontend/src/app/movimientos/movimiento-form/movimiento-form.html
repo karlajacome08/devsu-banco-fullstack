@@ -1,0 +1,35 @@
+<form (ngSubmit)="onSubmit()">
+  <h3>Nuevo Movimiento</h3>
+
+  <div *ngIf="mensajeError" class="error-message">
+    {{ mensajeError }}
+  </div>
+
+  <div class="form-group">
+    <label>Cuenta</label>
+    <select [(ngModel)]="numeroCuentaSeleccionada" name="numeroCuenta">
+      <option value="">Seleccione...</option>
+      <option *ngFor="let cuenta of cuentas" [value]="cuenta.numeroCuenta">
+        {{ cuenta.numeroCuenta }} - {{ cuenta.tipoCuenta }}
+      </option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label>Tipo de Movimiento</label>
+    <select [(ngModel)]="tipoMovimiento" name="tipoMovimiento">
+      <option value="Deposito">Depósito</option>
+      <option value="Retiro">Retiro</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label>Monto</label>
+    <input type="number" [(ngModel)]="monto" name="monto" min="0" step="0.01" />
+  </div>
+
+  <div class="form-actions">
+    <button type="submit" class="btn-primary">Guardar</button>
+    <button type="button" class="btn-secondary" (click)="onCancelar()">Cancelar</button>
+  </div>
+</form>
